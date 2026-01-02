@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+#
+# Switch to a workspace and move it to the currently focused output
+# Usage: switch-workspace <workspace-name>
+
+set -euo pipefail
+
+# Check for required argument
+if [[ $# -ne 1 ]]; then
+    echo "Usage: switch-workspace <workspace-name>" >&2
+    exit 1
+fi
+
+workspace="$1"
+
+# Capture the currently focused output BEFORE switching workspaces
+focused_output=$(swaymsg -t get_workspaces | jq -r '.[] | select(.focused) | .output')
+
+if [[ -z "$focused_output" ]]; then
+    echo "Error: Could not determine focused output" >&2
+    exit 1
+fi
+
+# Switch to workspace by number (works with dynamic names), move it to the captured output, and focus it again
+swaymsg "workspace number $workspace; move workspace to output $focused_output; workspace number $workspace"
+
+# Get the actual workspace name for the notification
+workspace_name=$(swaymsg -t get_workspaces | jq -r ".[] | select(.num == $workspace) | .name")
+
+# Send notification showing both number and name
+notify-send -t 1500 -u low "Switched to Workspace $workspace"

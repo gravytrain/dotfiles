@@ -1,0 +1,376 @@
+# Default config for sway
+#
+# Copy this to ~/.config/sway/config and edit it to your liking.
+#
+# Read `man 5 sway` for a complete reference.
+
+### Variables
+#
+# Logo key. Use Mod1 for Alt.
+set $mod Mod1
+# Home row direction keys, like vim
+set $left j
+set $left2 u
+set $down k
+set $up i
+set $right l
+set $right2 o
+# Your preferred terminal emulator
+set $term kitty
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+set $menu fuzzel --show drun
+
+include /etc/sway/config-vars.d/*
+
+### Output configuration
+#
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+output * bg ~/Pictures/wallhaven.png fill
+
+# Monitor positions supporting vertical left monitor
+output DP-6 transform 270 position 0,0
+output DP-7 position 1440,652
+output eDP-1 position 4000,652
+#
+# Example configuration:
+#
+#   output HDMI-A-1 resolution 1920x1080 position 1920,0
+#
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+
+### Idle configuration
+#
+# Example configuration:
+#
+# exec swayidle -w \
+#          timeout 300 'swaylock -f -c 000000' \
+#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+#          before-sleep 'swaylock -f -c 000000'
+#
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
+
+### Input configuration
+#
+# Example configuration:
+#
+#   input "2:14:SynPS/2_Synaptics_TouchPad" {
+#       dwt enabled
+#       tap enabled
+#       natural_scroll enabled
+#       middle_emulation enabled
+#   }
+#
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
+
+### Key bindings
+#
+# Basics:
+#
+    # Start a terminal
+    bindsym $mod+Return exec $term
+
+    # Kill focused window
+    bindsym $mod+Shift+q kill
+
+    # Start your launcher
+    bindsym $mod+d exec $menu
+
+    # Quick actions menu (workflow shortcuts)
+    bindsym $mod+Shift+d exec ~/.config/fuzzel/quick-actions.sh
+
+    # Okta app launcher
+    bindsym $mod+o exec ~/.config/fuzzel/okta-apps.sh
+
+    # Drag floating windows by holding down $mod and left mouse button.
+    # Resize them with right mouse button + $mod.
+    # Despite the name, also works for non-floating windows.
+    # Change normal to inverse to use left mouse button for resizing and right
+    # mouse button for dragging.
+    floating_modifier $mod normal
+
+    # Reload the configuration file
+    bindsym $mod+Shift+c reload
+
+    # Exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+    # Screenshots using grim and slurp
+    bindsym Print exec grim ~/Pictures/screen-$(date +'%Y%m%d-%H%M%S').png && notify-send "Screenshot" "Full screen saved"
+    bindsym Shift+Print exec slurp | grim -g - ~/Pictures/snip-$(date +'%Y%m%d-%H%M%S').png && notify-send "Screenshot" "Region saved"
+    bindsym $mod+Print exec grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot" "Copied to clipboard"
+
+    # Focus mode toggles
+    bindsym $mod+Shift+f exec makoctl mode -t focus && notify-send "Focus Mode" "$(makoctl mode | grep -q focus && echo 'Enabled - notifications silenced' || echo 'Disabled')"
+    bindsym $mod+Shift+n exec makoctl mode -t dnd && notify-send "DND Mode" "$(makoctl mode | grep -q dnd && echo 'Enabled - only critical' || echo 'Disabled')"
+
+    # Quick application launchers
+    bindsym $mod+Shift+s exec swaymsg '[class=Slack] focus' || slack
+    bindsym $mod+Shift+m exec evolution
+    bindsym $mod+Shift+b exec google-chrome || firefox
+
+
+#
+# Moving around:
+#
+    # Move your focus around
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # Or use $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # Move the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # Ditto, with arrow keys
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+#
+# Workspaces:
+#
+    # Tab to next/previous workspace
+    bindsym $mod+Tab workspace next_on_output
+    bindsym $mod+Shift+Tab workspace prev_on_output
+    # Move focused window betwen monitors
+    bindsym $mod+Shift+$left2 move workspace to output left
+    bindsym $mod+Shift+$right2 move workspace to output right
+    # Switch to workspace (with follow-focus behavior)
+    bindsym $mod+1 exec ~/.config/sway/scripts/switch-workspace 1
+    bindsym $mod+2 exec ~/.config/sway/scripts/switch-workspace 2
+    bindsym $mod+3 exec ~/.config/sway/scripts/switch-workspace 3
+    bindsym $mod+4 exec ~/.config/sway/scripts/switch-workspace 4
+    bindsym $mod+5 exec ~/.config/sway/scripts/switch-workspace 5
+    bindsym $mod+6 exec ~/.config/sway/scripts/switch-workspace 6
+    bindsym $mod+7 exec ~/.config/sway/scripts/switch-workspace 7
+    bindsym $mod+8 exec ~/.config/sway/scripts/switch-workspace 8
+    bindsym $mod+9 exec ~/.config/sway/scripts/switch-workspace 9
+    bindsym $mod+0 exec ~/.config/sway/scripts/switch-workspace 10
+    # Move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace number 1
+    bindsym $mod+Shift+2 move container to workspace number 2
+    bindsym $mod+Shift+3 move container to workspace number 3
+    bindsym $mod+Shift+4 move container to workspace number 4
+    bindsym $mod+Shift+5 move container to workspace number 5
+    bindsym $mod+Shift+6 move container to workspace number 6
+    bindsym $mod+Shift+7 move container to workspace number 7
+    bindsym $mod+Shift+8 move container to workspace number 8
+    bindsym $mod+Shift+9 move container to workspace number 9
+    bindsym $mod+Shift+0 move container to workspace number 10
+    # Note: workspaces can have any name you want, not just numbers.
+    # We just use 1-10 as the default.
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+b splith
+    bindsym $mod+v splitv
+
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+w layout tabbed
+    bindsym $mod+e layout toggle split
+
+    # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
+
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+Shift+space floating toggle
+
+    # Swap focus between the tiling area and the floating area
+    bindsym $mod+space focus mode_toggle
+
+    # Move focus to the parent container
+    bindsym $mod+a focus parent
+
+    # Borders and Gaps
+    gaps inner 4
+    gaps outer 4
+
+    default_border pixel 2
+
+    titlebar_padding 8 2
+    titlebar_border_thickness 2
+
+#
+# Colorscheme - Tokyo Night
+#
+
+set $bg0    #1a1b26
+set $bg1    #24283b
+set $fg     #c0caf5
+set $green  #9ece6a
+set $blue   #7aa2f7
+set $yellow #e0af68
+set $gray   #565f89
+set $red    #f7768e
+set $magenta #bb9af7
+set $cyan   #7dcfff
+set $white  #a9b1d6
+set $orange #ff9e64
+
+# Window colors         border    bg        text      indicator child_border
+client.focused          $blue     $bg1      $fg       $cyan     $blue
+client.focused_inactive $gray     $bg0      $white    $gray     $gray
+client.unfocused        $bg0      $bg0      $gray     $bg0      $bg0
+client.urgent           $red      $red      $bg0      $red      $red
+client.placeholder      $bg0      $bg0      $gray     $bg0      $bg0
+client.background       $bg0
+
+#
+# Scratchpad:
+#
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
+
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+#
+# Resizing containers:
+#
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # Ditto, with arrow keys
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+bar {
+    swaybar_command waybar
+}
+
+#
+# Autostart
+#
+
+## Layout for docked vs not docked laptop
+exec_always ~/.config/sway/scripts/dock-layout.sh
+
+## Mako Notifications
+exec mako
+
+## Dynamic workspace naming (disabled - using simple numbers)
+# exec ~/.config/sway/scripts/dynamic-workspace-names.py
+
+## Tech pass
+exec --no-startup-id tech-pass
+
+## Slack
+exec --no-startup-id slack
+
+## Set Laptop Brightness
+exec --no-startup-id brightnessctl -d intel_backlight set 75%
+
+#
+# Workspace Assignments
+#
+
+assign [class="Slack"] workspace 3
+assign [app_id="code"] workspace 2
+assign [class="Code"] workspace 2
+assign [class="jetbrains-.*"] workspace 2
+assign [class="VSCodium"] workspace 2
+
+#
+# Enhanced Window Rules
+#
+
+## Floating windows for common tools
+for_window [app_id="pavucontrol"] floating enable, resize set 800 600
+for_window [app_id="nm-connection-editor"] floating enable
+for_window [app_id="blueman-manager"] floating enable
+for_window [title="^Picture-in-Picture$"] floating enable, sticky enable, resize set 640 360
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="dialog"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+
+## Development tool floating windows
+for_window [title="^Python$|^node$|^irb$|^ruby$|^ghci$"] floating enable, resize set 1000 700
+for_window [app_id="python3"] floating enable, resize set 1000 700
+for_window [title="^DevTools -.*"] floating enable, resize set 1200 800
+
+## File pickers and dialogs
+for_window [title="^Open File$|^Save File$|^Open Folder$|^Save As$"] floating enable, resize set 1000 700
+for_window [app_id="org.gnome.Nautilus" title="^(?!.*Nautilus).*"] floating enable
+for_window [app_id="thunar" title="^(?!.*Thunar).*"] floating enable
+
+## System monitors as floating
+for_window [app_id="htop"] floating enable, resize set 1200 800
+for_window [app_id="btop"] floating enable, resize set 1400 900
+for_window [app_id="s-tui"] floating enable, resize set 1000 700
+
+## Git clients
+for_window [app_id="lazygit"] floating enable, resize set 1600 1000
+for_window [app_id="gitui"] floating enable, resize set 1600 1000
+
+## Image viewers as floating
+for_window [app_id="imv"] floating enable
+for_window [app_id="feh"] floating enable
+for_window [app_id="mpv"] floating enable, resize set 960 540
+
+## Inhibit idle for specific applications
+for_window [app_id="mpv"] inhibit_idle visible
+for_window [app_id="vlc"] inhibit_idle visible
+for_window [class="YouTube"] inhibit_idle visible
+for_window [title=".*YouTube.*"] inhibit_idle fullscreen
+
+## Browser-specific rules for development
+for_window [title="Developer Tools.*"] floating enable, move position center
+for_window [title="Firefox — Sharing Indicator"] floating enable, move position 0 0
+
+## Sticky windows (show on all workspaces)
+for_window [title="^Picture-in-Picture$"] sticky enable
+for_window [app_id="org.keepassxc.KeePassXC" title="^KeePassXC -.*"] floating enable, sticky enable
+
+## Transparency for specific apps (requires Sway 1.8+)
+# Uncomment if you want transparency
+# for_window [app_id="kitty"] opacity 0.95
+# for_window [app_id="Alacritty"] opacity 0.95
+
+## Focus urgent windows automatically
+for_window [urgent=latest] focus
+
+## Initial workspace layout hints
+# workspace 2 output DP-7
+# workspace 2 layout tabbed
+
+include /etc/sway/config.d/*

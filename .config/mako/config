@@ -1,0 +1,267 @@
+# Mako Notification Daemon Configuration
+# Enhanced for development workflow
+# Theme: Tokyo Night
+
+### Default notification settings
+font=JetBrainsMono Nerd Font 11
+background-color=#1a1b26
+text-color=#c0caf5
+border-color=#7aa2f7
+border-size=2
+border-radius=0
+padding=15
+margin=10
+width=400
+height=150
+icon-path=/usr/share/icons/Papirus-Dark
+
+# Position notifications at top-right
+anchor=top-right
+max-visible=5
+layer=overlay
+
+# Default timeout: 5 seconds
+default-timeout=5000
+
+# Group notifications by app
+group-by=app-name
+
+# Enable markup for rich formatting
+markup=1
+
+# Max icon size
+max-icon-size=64
+
+# Notification actions
+actions=1
+
+### Per-urgency styling
+
+# Low urgency (info)
+[urgency=low]
+background-color=#1a1b26
+text-color=#a9b1d6
+border-color=#3b4261
+default-timeout=3000
+
+# Normal urgency
+[urgency=normal]
+background-color=#1a1b26
+text-color=#c0caf5
+border-color=#7aa2f7
+default-timeout=5000
+
+# High urgency (critical alerts)
+[urgency=critical]
+background-color=#24283b
+text-color=#f7768e
+border-color=#f7768e
+default-timeout=0
+ignore-timeout=1
+
+### Application-specific notification styles
+
+# Build notifications (success)
+[app-name="builds" summary~=".*success.*|.*passed.*|.*complete.*"]
+background-color=#2b3339
+border-color=#a7c080
+text-color=#a7c080
+default-timeout=4000
+
+# Build notifications (failure)
+[app-name="builds" summary~=".*fail.*|.*error.*"]
+background-color=#2b3339
+border-color=#e67e80
+text-color=#e67e80
+default-timeout=0
+
+# Test notifications (success)
+[app-name="tests" summary~=".*pass.*|.*success.*"]
+background-color=#2b3339
+border-color=#a7c080
+text-color=#d3c6aa
+default-timeout=3000
+
+# Test notifications (failure)
+[app-name="tests" summary~=".*fail.*|.*error.*"]
+background-color=#2b3339
+border-color=#e67e80
+text-color=#e67e80
+default-timeout=10000
+
+# Git notifications
+[app-name="git"]
+background-color=#2b3339
+border-color=#dbbc7f
+text-color=#d3c6aa
+default-timeout=4000
+
+# CI/CD notifications
+[app-name="ci" summary~=".*success.*|.*deploy.*"]
+background-color=#2b3339
+border-color=#a7c080
+text-color=#a7c080
+default-timeout=6000
+
+[app-name="ci" summary~=".*fail.*|.*error.*"]
+background-color=#2b3339
+border-color=#e67e80
+text-color=#e67e80
+default-timeout=0
+
+# Development server notifications
+[app-name="dev-server"]
+background-color=#2b3339
+border-color=#7fbbb3
+text-color=#d3c6aa
+default-timeout=3000
+
+# Docker notifications
+[app-name="docker"]
+background-color=#2b3339
+border-color=#7fbbb3
+text-color=#d3c6aa
+default-timeout=5000
+
+# Database notifications
+[app-name="database"]
+background-color=#2b3339
+border-color=#d699b6
+text-color=#d3c6aa
+default-timeout=5000
+
+# Slack notifications
+[app-name="Slack"]
+background-color=#1a1b26
+border-color=#bb9af7
+text-color=#c0caf5
+default-timeout=8000
+
+# Jira notifications
+[summary~=".*[Jj]ira.*"]
+background-color=#1a1b26
+border-color=#7dcfff
+text-color=#c0caf5
+default-timeout=8000
+
+# Confluence notifications
+[summary~=".*[Cc]onfluence.*"]
+background-color=#1a1b26
+border-color=#7dcfff
+text-color=#c0caf5
+default-timeout=8000
+
+# Email notifications (don't timeout quickly)
+[app-name="Thunderbird"]
+background-color=#2b3339
+border-color=#7fbbb3
+text-color=#d3c6aa
+default-timeout=10000
+
+[app-name="Evolution"]
+background-color=#2b3339
+border-color=#7fbbb3
+text-color=#d3c6aa
+default-timeout=10000
+
+# Calendar/meeting notifications (critical)
+[summary~=".*[Cc]alendar.*|.*[Mm]eeting.*"]
+background-color=#24283b
+border-color=#e0af68
+text-color=#e0af68
+default-timeout=0
+
+# Zoom meeting notifications - HIGH PRIORITY
+[summary~=".*[Cc]alendar.*|.*[Mm]eeting.*" body~=".*[Zz]oom.*"]
+background-color=#24283b
+border-color=#7aa2f7
+text-color=#7aa2f7
+default-timeout=0
+
+# Teams meeting notifications
+[summary~=".*[Cc]alendar.*|.*[Mm]eeting.*" body~=".*[Tt]eams.*"]
+background-color=#24283b
+border-color=#bb9af7
+text-color=#bb9af7
+default-timeout=0
+
+# Google Meet notifications
+[summary~=".*[Cc]alendar.*|.*[Mm]eeting.*" body~=".*meet\.google.*"]
+background-color=#24283b
+border-color=#9ece6a
+text-color=#9ece6a
+default-timeout=0
+
+# Zoom app notifications
+[app-name="zoom"]
+background-color=#24283b
+border-color=#7aa2f7
+text-color=#c0caf5
+default-timeout=8000
+
+# Zoom meeting starting soon (5 min warning style)
+[app-name="zoom" summary~=".*[Ss]tarting.*|.*[Jj]oin.*"]
+background-color=#24283b
+border-color=#f7768e
+text-color=#f7768e
+default-timeout=0
+
+# Screenshot notifications
+[app-name="screenshot"]
+background-color=#2b3339
+border-color=#a7c080
+text-color=#d3c6aa
+default-timeout=3000
+
+# Battery warnings
+[app-name="battery" summary~=".*low.*|.*critical.*"]
+background-color=#3c474d
+border-color=#e67e80
+text-color=#e67e80
+default-timeout=0
+
+# VPN notifications
+[app-name="vpn"]
+background-color=#2b3339
+border-color=#a7c080
+text-color=#d3c6aa
+default-timeout=4000
+
+# System update notifications
+[summary~=".*[Uu]pdate.*|.*[Uu]pgrade.*"]
+background-color=#2b3339
+border-color=#dbbc7f
+text-color=#d3c6aa
+default-timeout=8000
+
+# Volume notifications (short lived)
+[app-name="volume"]
+background-color=#2b3339
+border-color=#e69875
+text-color=#d3c6aa
+default-timeout=2000
+
+# Brightness notifications (short lived)
+[app-name="brightness"]
+background-color=#2b3339
+border-color=#dbbc7f
+text-color=#d3c6aa
+default-timeout=2000
+
+### Mode-specific overrides (to be used with makoctl mode)
+
+# Focus mode - minimal notifications
+[mode=focus]
+invisible=1
+
+# Do Not Disturb mode - hide low urgency
+[mode=dnd urgency=low]
+invisible=1
+
+# Do Not Disturb mode - hide normal urgency
+[mode=dnd urgency=normal]
+invisible=1
+
+# Silent mode - no sound, short timeouts
+[mode=silent]
+default-timeout=2000
